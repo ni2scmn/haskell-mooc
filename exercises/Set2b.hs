@@ -1,9 +1,8 @@
 module Set2b where
 
-import Mooc.Todo
-
 -- Some imports you'll need. Don't add other imports :)
 import Data.List
+import Mooc.Todo
 
 ------------------------------------------------------------------------------
 -- Ex 1: compute binomial coefficients using recursion. Binomial
@@ -18,7 +17,7 @@ import Data.List
 binomial :: Integer -> Integer -> Integer
 binomial _ 0 = 1
 binomial n k
-  | n==0 && k > 0 = 0
+  | n == 0 && k > 0 = 0
   | otherwise = binomial (n - 1) k + binomial (n - 1) (k - 1)
 
 ------------------------------------------------------------------------------
@@ -33,7 +32,7 @@ oddFactorial :: Integer -> Integer
 oddFactorial 0 = 0
 oddFactorial 1 = 1
 oddFactorial n
-  | even n = oddFactorial (n -1)
+  | even n = oddFactorial (n - 1)
   | otherwise = n * oddFactorial (n - 2)
 
 ------------------------------------------------------------------------------
@@ -41,10 +40,15 @@ oddFactorial n
 -- common divisor:
 --
 -- Given two numbers, a and b,
+
 -- * if one is zero, return the other number
+
 -- * if not, subtract the smaller number from the larger one
+
 -- * replace the larger number with this new number
+
 -- * repeat
+
 --
 -- For example,
 --   myGcd 9 12 ==> 3
@@ -63,6 +67,7 @@ oddFactorial n
 --   0      3
 --
 -- Background reading:
+
 -- * https://en.wikipedia.org/wiki/Euclidean_algorithm
 
 myGcd :: Integer -> Integer -> Integer
@@ -70,7 +75,7 @@ myGcd 0 b = b
 myGcd a 0 = a
 myGcd a b
   | a < b = myGcd b a -- assert a is always the greater number
-  | otherwise = myGcd (a - b) b 
+  | otherwise = myGcd (a - b) b
 
 ------------------------------------------------------------------------------
 -- Ex 4: Implement the function leftpad which adds space characters
@@ -82,7 +87,9 @@ myGcd a b
 --   leftpad "xxxxx" 3 ==> "xxxxx"
 --
 -- Tips:
+
 -- * you can combine strings with the ++ operator.
+
 -- * you can compute the length of a string with the length function
 
 leftpad :: String -> Int -> String
@@ -108,7 +115,7 @@ countdown n = "Ready! " ++ countdownHelper n ++ " Liftoff!"
 
 countdownHelper :: Integer -> String
 countdownHelper 0 = "0... "
-countdownHelper n = show n ++ "... " ++ countdownHelper (n-1)
+countdownHelper n = show n ++ "... " ++ countdownHelper (n - 1)
 
 ------------------------------------------------------------------------------
 -- Ex 6: implement the function smallestDivisor that returns the
@@ -128,7 +135,7 @@ countdownHelper n = show n ++ "... " ++ countdownHelper (n-1)
 smallestDivisor :: Integer -> Integer
 smallestDivisor n = smallestDivisorHelper n 2
 
-smallestDivisorHelper :: Integer -> Integer -> Integer 
+smallestDivisorHelper :: Integer -> Integer -> Integer
 smallestDivisorHelper n k
   | mod n k == 0 = k
   | otherwise = smallestDivisorHelper n (k + 1)
@@ -142,7 +149,7 @@ smallestDivisorHelper n k
 isPrime :: Integer -> Bool
 isPrime 0 = False
 isPrime 1 = False
-isPrime x = smallestDivisor x == x 
+isPrime x = smallestDivisor x == x
 
 ------------------------------------------------------------------------------
 -- Ex 8: implement a function biggestPrimeAtMost that returns the
@@ -159,4 +166,4 @@ isPrime x = smallestDivisor x == x
 biggestPrimeAtMost :: Integer -> Integer
 biggestPrimeAtMost x
   | isPrime x = x
-  | otherwise = biggestPrimeAtMost (x - 1)
+  | otherwise = biggestPrimeAtMost (x - 1)

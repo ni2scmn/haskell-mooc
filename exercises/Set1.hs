@@ -24,6 +24,7 @@ import Mooc.Todo
 one :: Int
 two :: Int
 one = 1
+
 two = 2
 
 ------------------------------------------------------------------------------
@@ -57,7 +58,8 @@ quadruple x = 2 * double x
 
 distance :: Double -> Double -> Double -> Double -> Double
 distance x1 y1 x2 y2 = sqrt (sqdiff x1 x2 + sqdiff y1 y2)
-  where sqdiff x y = abs (x - y) ^ 2
+  where
+    sqdiff x y = abs (x - y) ^ 2
 
 ------------------------------------------------------------------------------
 -- Ex 5: define the function eeny that returns "eeny" for even inputs
@@ -74,9 +76,10 @@ eeny x = if even x then "eeny" else "meeny"
 -- "mellon".^
 
 checkPassword :: String -> String
-checkPassword password = if password == "swordfish" || password == "mellon"
-                         then "You're in."
-                         else "ACCESS DENIED!"
+checkPassword password =
+  if password == "swordfish" || password == "mellon"
+    then "You're in."
+    else "ACCESS DENIED!"
 
 ------------------------------------------------------------------------------
 -- Ex 7: A postal service prices packages the following way.
@@ -88,12 +91,13 @@ checkPassword password = if password == "swordfish" || password == "mellon"
 -- in grams, and returns the cost in credits.
 
 postagePrice :: Int -> Int
-postagePrice weigth = if weigth <= 500
-                      then 250
-                      else 
-                        if weigth <= 5000
-                        then 300 + weigth
-                        else 6000 
+postagePrice weigth =
+  if weigth <= 500
+    then 250
+    else
+      if weigth <= 5000
+        then 300 + weigth
+        else 6000
 
 ------------------------------------------------------------------------------
 -- Ex 8: define a function isZero that returns True if it is given an
@@ -114,7 +118,7 @@ isZero _ = False
 
 sumTo :: Integer -> Integer
 sumTo 0 = 0
-sumTo n = n + sumTo (n-1)
+sumTo n = n + sumTo (n - 1)
 
 ------------------------------------------------------------------------------
 -- Ex 10: power n k should compute n to the power k (i.e. n^k)
@@ -123,7 +127,7 @@ sumTo n = n + sumTo (n-1)
 power :: Integer -> Integer -> Integer
 power _ 0 = 1
 power n 1 = n
-power n k = n * power n (k-1)
+power n k = n * power n (k - 1)
 
 ------------------------------------------------------------------------------
 -- Ex 11: ilog3 n should be the number of times you can divide given

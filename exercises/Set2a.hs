@@ -12,10 +12,9 @@
 
 module Set2a where
 
-import Mooc.Todo
-
 -- Some imports you'll need. Don't add other imports :)
 import Data.List
+import Mooc.Todo
 
 ------------------------------------------------------------------------------
 -- Ex 1: Define the constant years, that is a list of the values 1982,
@@ -33,7 +32,8 @@ years = [1982, 2004, 2020]
 
 takeFinal :: Int -> [a] -> [a]
 takeFinal n xs = drop m xs
-                  where m = (length xs) - n
+  where
+    m = (length xs) - n
 
 ------------------------------------------------------------------------------
 -- Ex 3: Update an element at a certain index in a list. More
@@ -107,9 +107,9 @@ palindromify s
 safeDiv :: Integer -> Integer -> Maybe Integer
 -- safeDiv _ 0 = Nothing
 -- safeDiv x y = Just (div x y)
-safeDiv x y = case y of 
-                0 -> Nothing
-                _ -> Just (div x y)
+safeDiv x y = case y of
+  0 -> Nothing
+  _ -> Just (div x y)
 
 ------------------------------------------------------------------------------
 -- Ex 8: implement a function greet that greets a person given a first
@@ -121,9 +121,9 @@ safeDiv x y = case y of
 --   greet "John" (Just "Smith")  ==> "Hello, John Smith!"
 
 greet :: String -> Maybe String -> String
-greet first last = case last of 
-                    (Just l) -> "Hello, " ++ first ++ " " ++ l ++ "!"
-                    Nothing -> "Hello, " ++ first ++ "!"
+greet first last = case last of
+  (Just l) -> "Hello, " ++ first ++ " " ++ l ++ "!"
+  Nothing -> "Hello, " ++ first ++ "!"
 
 ------------------------------------------------------------------------------
 -- Ex 9: safe list indexing. Define a function safeIndex so that
@@ -140,7 +140,7 @@ greet first last = case last of
 
 safeIndex :: [a] -> Int -> Maybe a
 safeIndex xs i
-  | null xs = Nothing
+  | null xs = Nothing
   | i < 0 = Nothing
   | i >= length xs = Nothing
   | otherwise = Just (xs !! i)
@@ -154,8 +154,8 @@ safeIndex xs i
 --   eitherDiv 4 0   ==> Left "4/0"
 
 eitherDiv :: Integer -> Integer -> Either String Integer
-eitherDiv x y = 
-  case y of 
+eitherDiv x y =
+  case y of
     0 -> Left (show x ++ "/" ++ show y)
     _ -> Right (div x y)
 
@@ -175,5 +175,5 @@ eitherDiv x y =
 
 addEithers :: Either String Int -> Either String Int -> Either String Int
 addEithers (Right i) (Right j) = Right (i + j)
-addEithers (Left i)  _         = Left i
-addEithers _         (Left i)  = Left i 
+addEithers (Left i) _ = Left i
+addEithers _ (Left i) = Left i
