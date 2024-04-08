@@ -20,7 +20,6 @@
 -- Feel free to use if-then-else, guards, and ordering functions (< and > etc.).
 --
 -- The tests will check that you haven't added imports :)
-
 {-# LANGUAGE NoImplicitPrelude #-}
 
 module Set3b where
@@ -39,7 +38,7 @@ import Mooc.Todo
 --   buildList 7 0 3 ==> [3]
 
 buildList :: Int -> Int -> Int -> [Int]
-buildList _     0     end = [end]
+buildList _ 0 end = [end]
 buildList start count end = start : (buildList start (count - 1) end)
 
 ------------------------------------------------------------------------------
@@ -53,11 +52,11 @@ sums :: Int -> [Int]
 sums n = sumsHelper 1 n 0
 
 sumsHelper :: Int -> Int -> Int -> [Int]
-sumsHelper _ 0 _ = []  -- Base case: reached the end
+sumsHelper _ 0 _ = [] -- Base case: reached the end
 sumsHelper current totalAcc sumAcc = sumAcc' : sumsHelper (current + 1) (totalAcc - 1) sumAcc'
   where
     sumAcc' = sumAcc + current
-  
+
 ------------------------------------------------------------------------------
 -- Ex 3: define a function mylast that returns the last value of the
 -- given list. For an empty list, a provided default value is
@@ -71,7 +70,7 @@ sumsHelper current totalAcc sumAcc = sumAcc' : sumsHelper (current + 1) (totalAc
 
 mylast :: a -> [a] -> a
 mylast def [] = def
-mylast def (x:xs) = mylast x xs
+mylast def (x : xs) = mylast x xs
 
 ------------------------------------------------------------------------------
 -- Ex 4: safe list indexing. Define a function indexDefault so that
@@ -89,9 +88,9 @@ mylast def (x:xs) = mylast x xs
 --   indexDefault ["a","b","c"] (-1) "d" ==> "d"
 
 indexDefault :: [a] -> Int -> a -> a
-indexDefault []     _ def = def
-indexDefault (x:xs) 0 _   = x
-indexDefault (x:xs) i def = indexDefault xs (i-1) def
+indexDefault [] _ def = def
+indexDefault (x : xs) 0 _ = x
+indexDefault (x : xs) i def = indexDefault xs (i - 1) def
 
 ------------------------------------------------------------------------------
 -- Ex 5: define a function that checks if the given list is in
@@ -108,8 +107,8 @@ indexDefault (x:xs) i def = indexDefault xs (i-1) def
 
 sorted :: [Int] -> Bool
 sorted [] = True
-sorted (x:y:xs) = x <= y && sorted (y:xs)
-sorted (x:xs) = True
+sorted (x : y : xs) = x <= y && sorted (y : xs)
+sorted (x : xs) = True
 
 ------------------------------------------------------------------------------
 -- Ex 6: compute the partial sums of the given list like this:
@@ -122,9 +121,10 @@ sorted (x:xs) = True
 
 sumsOf :: [Int] -> [Int]
 sumsOf [] = []
-sumsOf xs = sOf xs 0 where
-  sOf [] i = []
-  sOf (x:xs) i = (i+x):(sOf xs (i+x)) 
+sumsOf xs = sOf xs 0
+  where
+    sOf [] i = []
+    sOf (x : xs) i = (i + x) : (sOf xs (i + x))
 
 ------------------------------------------------------------------------------
 -- Ex 7: implement the function merge that merges two sorted lists of
@@ -138,11 +138,11 @@ sumsOf xs = sOf xs 0 where
 
 merge :: [Int] -> [Int] -> [Int]
 merge [] [] = []
-merge (x:xs) [] = x:(merge xs [])
-merge [] (y:ys) = y:(merge [] ys)
-merge (x:xs) (y:ys)
-  | x <= y = x:(merge xs (y:ys))
-  | otherwise = y:(merge (x:xs) ys)
+merge (x : xs) [] = x : (merge xs [])
+merge [] (y : ys) = y : (merge [] ys)
+merge (x : xs) (y : ys)
+  | x <= y = x : (merge xs (y : ys))
+  | otherwise = y : (merge (x : xs) ys)
 
 ------------------------------------------------------------------------------
 -- Ex 8: compute the biggest element, using a comparison function
@@ -150,9 +150,13 @@ merge (x:xs) (y:ys)
 --
 -- That is, implement the function mymaximum that takes
 --
+
 -- * a function `bigger` :: a -> a -> Bool
+
 -- * a value `initial` of type a
+
 -- * a list `xs` of values of type a
+
 --
 -- and returns the biggest value it sees, considering both `initial`
 -- and all element in `xs`.
@@ -166,8 +170,9 @@ merge (x:xs) (y:ys)
 --     ==> ("Mouse",8)
 
 mymaximum :: (a -> a -> Bool) -> a -> [a] -> a
-mymaximum _      initial []     = initial
-mymaximum bigger initial (x:xs) = mymaximum bigger mx xs where
+mymaximum _ initial [] = initial
+mymaximum bigger initial (x : xs) = mymaximum bigger mx xs
+  where
     mx = if bigger x initial then x else initial
 
 ------------------------------------------------------------------------------
@@ -184,7 +189,7 @@ mymaximum bigger initial (x:xs) = mymaximum bigger mx xs where
 map2 :: (a -> b -> c) -> [a] -> [b] -> [c]
 map2 _ [] bs = []
 map2 _ as [] = []
-map2 f (a:as) (b:bs) = (f a b):(map2 f as bs)
+map2 f (a : as) (b : bs) = (f a b) : (map2 f as bs)
 
 ------------------------------------------------------------------------------
 -- Ex 10: implement the function maybeMap, which works a bit like a
@@ -209,6 +214,6 @@ map2 f (a:as) (b:bs) = (f a b):(map2 f as bs)
 
 maybeMap :: (a -> Maybe b) -> [a] -> [b]
 maybeMap f [] = []
-maybeMap f (x:xs) = case f x of 
-                      (Just j) -> j:(maybeMap f xs)
-                      Nothing -> maybeMap f xs
+maybeMap f (x : xs) = case f x of
+  (Just j) -> j : (maybeMap f xs)
+  Nothing -> maybeMap f xs
