@@ -5,13 +5,12 @@
 
 module Set3a where
 
-import Mooc.Todo
-
 -- Some imports you'll need.
 -- Do not add any other imports! :)
 import Data.Char
 import Data.Either
 import Data.List
+import Mooc.Todo
 
 ------------------------------------------------------------------------------
 -- Ex 1: implement the function maxBy that takes as argument a
@@ -83,9 +82,10 @@ palindromeHalfs xs = map firstHalf (filter palindrome xs)
 
 firstHalf :: String -> String
 firstHalf x = take n x
-  where n = div lengthx 2 + odd
-        odd = mod lengthx 2
-        lengthx = length x
+  where
+    n = div lengthx 2 + odd
+    odd = mod lengthx 2
+    lengthx = length x
 
 palindrome :: String -> Bool
 palindrome x = x == reverse x
@@ -109,7 +109,7 @@ capitalize :: String -> String
 capitalize x = unwords $ map capitalizeFirst (words x)
 
 capitalizeFirst :: String -> String
-capitalizeFirst (x:xs) = (toUpper x):xs
+capitalizeFirst (x : xs) = (toUpper x) : xs
 
 ------------------------------------------------------------------------------
 -- Ex 6: powers k max should return all the powers of k that are less
@@ -126,7 +126,7 @@ capitalizeFirst (x:xs) = (toUpper x):xs
 --   * the function takeWhile
 
 powers :: Int -> Int -> [Int]
-powers k max = takeWhile (<=max) [k^i | i <- [0..]]
+powers k max = takeWhile (<= max) [k ^ i | i <- [0 ..]]
 
 ------------------------------------------------------------------------------
 -- Ex 7: implement a functional while loop. While should be a function
@@ -148,7 +148,7 @@ powers k max = takeWhile (<=max) [k^i | i <- [0..]]
 --   in while check tail "xyzAvvt"
 --     ==> Avvt
 
-while :: (a->Bool) -> (a->a) -> a -> a
+while :: (a -> Bool) -> (a -> a) -> a -> a
 while check update value
   | not (check value) = value
   | otherwise = while check update (update value)
@@ -172,18 +172,18 @@ while check update value
 
 whileRight :: (a -> Either b a) -> a -> b
 whileRight check x = case (check x) of
-                      (Left l) -> l
-                      (Right r) -> whileRight check r 
+  (Left l) -> l
+  (Right r) -> whileRight check r
 
 -- for the whileRight examples:
 -- step k x doubles x if it's less than k
 step :: Int -> Int -> Either Int Int
-step k x = if x<k then Right (2*x) else Left x
+step k x = if x < k then Right (2 * x) else Left x
 
 -- bomb x implements a countdown: it returns x-1 or "BOOM" if x was 0
 bomb :: Int -> Either String Int
 bomb 0 = Left "BOOM"
-bomb x = Right (x-1)
+bomb x = Right (x - 1)
 
 ------------------------------------------------------------------------------
 -- Ex 9: given a list of strings and a length, return all strings that
@@ -197,7 +197,7 @@ bomb x = Right (x-1)
 -- Hint! This is a great use for list comprehensions
 
 joinToLength :: Int -> [String] -> [String]
-joinToLength n x = [c |i <- x, j <- x, let c = i++j, length c == n]
+joinToLength n x = [c | i <- x, j <- x, let c = i ++ j, length c == n]
 
 ------------------------------------------------------------------------------
 -- Ex 10: implement the operator +|+ that returns a list with the first
@@ -215,8 +215,7 @@ joinToLength n x = [c |i <- x, j <- x, let c = i++j, length c == n]
 (+|+) [] [] = []
 (+|+) a [] = [head a]
 (+|+) [] b = [head b]
-(+|+) a b = [(head a)]++[(head b)]
-
+(+|+) a b = [(head a)] ++ [(head b)]
 
 ------------------------------------------------------------------------------
 -- Ex 11: remember the lectureParticipants example from Lecture 2? We
@@ -234,7 +233,8 @@ joinToLength n x = [c |i <- x, j <- x, let c = i++j, length c == n]
 
 sumRights :: [Either a Int] -> Int
 sumRights x = sum $ sumEither x
-  where sumEither x = map (either (\_ -> 0) (\y -> y)) x
+  where
+    sumEither x = map (either (\_ -> 0) (\y -> y)) x
 
 ------------------------------------------------------------------------------
 -- Ex 12: recall the binary function composition operation
@@ -251,7 +251,7 @@ sumRights x = sum $ sumEither x
 --   multiCompose [(+1), (2^), (3*)] 0 ==> 2
 
 multiCompose [] = id
-multiCompose (f:fs) = f . (multiCompose fs)
+multiCompose (f : fs) = f . (multiCompose fs)
 
 ------------------------------------------------------------------------------
 -- Ex 13: let's consider another way to compose multiple functions. Given
@@ -274,6 +274,7 @@ multiCompose (f:fs) = f . (multiCompose fs)
 
 multiApp :: ([b] -> c) -> [(a -> b)] -> a -> c
 multiApp f gs x = f $ map (\g -> g x) gs
+
 ------------------------------------------------------------------------------
 -- Ex 14: in this exercise you get to implement an interpreter for a
 -- simple language. You should keep track of the x and y coordinates,
@@ -308,12 +309,12 @@ multiApp f gs x = f $ map (\g -> g x) gs
 
 interpreter :: [String] -> [String]
 interpreter commands = reverse $ go commands 0 0 []
-  where go [] x y pq = pq
-        go (c:cs) x y pq = case c of 
-          "up" -> go cs x (y + 1) pq
-          "down" -> go cs x (y - 1) pq
-          "left" -> go cs (x-1) y pq
-          "right" -> go cs (x+1) y pq
-          "printX" -> go cs x y ((show x) : pq)
-          "printY" -> go cs x y ((show y) : pq)
-          
+  where
+    go [] x y pq = pq
+    go (c : cs) x y pq = case c of
+      "up" -> go cs x (y + 1) pq
+      "down" -> go cs x (y - 1) pq
+      "left" -> go cs (x - 1) y pq
+      "right" -> go cs (x + 1) y pq
+      "printX" -> go cs x y ((show x) : pq)
+      "printY" -> go cs x y ((show y) : pq)
