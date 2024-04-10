@@ -22,8 +22,8 @@ countNothings :: [Maybe a] -> Int
 countNothings xs = foldr countHelper 0 xs
 
 countHelper ele count = case ele of
-                          (Just _) -> count
-                          Nothing -> count + 1
+  (Just _) -> count
+  Nothing -> count + 1
 
 ------------------------------------------------------------------------------
 -- Ex 2: myMaximum with a fold. Just like in the previous exercise,
@@ -35,7 +35,7 @@ countHelper ele count = case ele of
 
 myMaximum :: [Int] -> Int
 myMaximum [] = 0
-myMaximum (x:xs) = foldr maxHelper x xs
+myMaximum (x : xs) = foldr maxHelper x xs
 
 -- maxHelper ele cur_max = if ele > cur_max then ele else cur_max
 maxHelper ele cur_max = max ele cur_max
@@ -51,12 +51,12 @@ maxHelper ele cur_max = max ele cur_max
 --   sumAndLength []             ==>  (0.0,0)
 --   sumAndLength [1.0,2.0,4.0]  ==>  (7.0,3)
 
-
-sumAndLength :: [Double] -> (Double,Int)
+sumAndLength :: [Double] -> (Double, Int)
 sumAndLength xs = foldr slHelper slStart xs
 
 slStart = (0, 0)
-slHelper ele (s,l) = (s+ele, l+1)
+
+slHelper ele (s, l) = (s + ele, l + 1)
 
 ------------------------------------------------------------------------------
 -- Ex 4: implement concat with a fold. Define concatHelper and
@@ -71,6 +71,7 @@ myConcat :: [[a]] -> [a]
 myConcat xs = foldr concatHelper concatStart xs
 
 concatStart = []
+
 concatHelper ele cnct = ele ++ cnct
 
 ------------------------------------------------------------------------------
@@ -86,7 +87,7 @@ largest :: [Int] -> [Int]
 largest xs = foldr largestHelper [] xs
 
 largestHelper ele [] = [ele]
-largestHelper ele x@(x1:xs) = if ele > x1 then [ele] else if x1 == ele then x1:x else x 
+largestHelper ele x@(x1 : xs) = if ele > x1 then [ele] else if x1 == ele then x1 : x else x
 
 ------------------------------------------------------------------------------
 -- Ex 6: get the first element of a list with a fold. Define
@@ -116,6 +117,6 @@ headHelper ele cur = Just ele
 myLast :: [a] -> Maybe a
 myLast xs = foldr lastHelper Nothing xs
 
-lastHelper ele cur = case cur of 
-                      Nothing -> Just ele
-                      (Just c) -> cur
+lastHelper ele cur = case cur of
+  Nothing -> Just ele
+  (Just c) -> cur
