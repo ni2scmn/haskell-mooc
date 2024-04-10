@@ -21,7 +21,9 @@ import Mooc.Todo
 countNothings :: [Maybe a] -> Int
 countNothings xs = foldr countHelper 0 xs
 
-countHelper = todo
+countHelper ele count = case ele of
+                          (Just _) -> count
+                          Nothing -> count + 1
 
 ------------------------------------------------------------------------------
 -- Ex 2: myMaximum with a fold. Just like in the previous exercise,
@@ -35,7 +37,8 @@ myMaximum :: [Int] -> Int
 myMaximum [] = 0
 myMaximum (x:xs) = foldr maxHelper x xs
 
-maxHelper = todo
+-- maxHelper ele cur_max = if ele > cur_max then ele else cur_max
+maxHelper ele cur_max = max ele cur_max
 
 ------------------------------------------------------------------------------
 -- Ex 3: compute the sum and length of a list with a fold. Define
@@ -52,8 +55,8 @@ maxHelper = todo
 sumAndLength :: [Double] -> (Double,Int)
 sumAndLength xs = foldr slHelper slStart xs
 
-slStart = todo
-slHelper = todo
+slStart = (0, 0)
+slHelper ele (s,l) = (s+ele, l+1)
 
 ------------------------------------------------------------------------------
 -- Ex 4: implement concat with a fold. Define concatHelper and
@@ -67,8 +70,8 @@ slHelper = todo
 myConcat :: [[a]] -> [a]
 myConcat xs = foldr concatHelper concatStart xs
 
-concatStart = todo
-concatHelper = todo
+concatStart = []
+concatHelper ele cnct = ele ++ cnct
 
 ------------------------------------------------------------------------------
 -- Ex 5: get all occurrences of the largest number in a list with a
@@ -82,8 +85,8 @@ concatHelper = todo
 largest :: [Int] -> [Int]
 largest xs = foldr largestHelper [] xs
 
-largestHelper = todo
-
+largestHelper ele [] = [ele]
+largestHelper ele x@(x1:xs) = if ele > x1 then [ele] else if x1 == ele then x1:x else x 
 
 ------------------------------------------------------------------------------
 -- Ex 6: get the first element of a list with a fold. Define
@@ -98,7 +101,7 @@ largestHelper = todo
 myHead :: [a] -> Maybe a
 myHead xs = foldr headHelper Nothing xs
 
-headHelper = todo
+headHelper ele cur = Just ele
 
 ------------------------------------------------------------------------------
 -- Ex 7: get the last element of a list with a fold. Define lasthelper
@@ -113,5 +116,6 @@ headHelper = todo
 myLast :: [a] -> Maybe a
 myLast xs = foldr lastHelper Nothing xs
 
-lastHelper = todo
-
+lastHelper ele cur = case cur of 
+                      Nothing -> Just ele
+                      (Just c) -> cur
