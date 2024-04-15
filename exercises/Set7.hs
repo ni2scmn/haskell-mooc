@@ -125,10 +125,10 @@ bake events = go Start events
 --   average (1.0 :| [2.0,3.0])  ==>  2.0
 
 average :: Fractional a => NonEmpty a -> a
-average = todo
--- average (x :| xs) = avg' xs x 1 where
---   avg' (x :| []) s c = (s+c)/(c+1)
---   avg' (x :| xs) s c = avg' xs (s+c) (c+1)
+-- average = todo
+average (x :| xs) = avg' xs x 1 where
+  avg' [] sum count = sum / count
+  avg' (x:xs) sum count = avg' xs (sum+x) (count+1)
 
 ------------------------------------------------------------------------------
 -- Ex 5: reverse a NonEmpty list.
@@ -136,8 +136,12 @@ average = todo
 -- PS. The Data.List.NonEmpty type has been imported for you
 
 reverseNonEmpty :: NonEmpty a -> NonEmpty a
-reverseNonEmpty = todo
-
+reverseNonEmpty l@(x:|[]) = l
+reverseNonEmpty (x:|xs) = xs_rev_head :| rev_tail
+  where xs_rev = reverse xs
+        xs_rev_head = head xs_rev
+        xs_rev_tail = tail xs_rev
+        rev_tail = xs_rev_tail ++ [x]
 ------------------------------------------------------------------------------
 -- Ex 6: implement Semigroup instances for the Distance, Time and
 -- Velocity types from exercise 1. The instances should perform
@@ -165,13 +169,13 @@ instance Semigroup Velocity where
 --
 -- What are the class constraints for the instances?
 
--- instance Semigroup (Set a) where
---   -- (<>) (Set []) (Set []) = Set []
---   -- (<>) (Set (x:xs)) (Set []) = a
---   (<>) a b = todo
+instance Ord a => Semigroup (Set a) where
+  (<>) (Set []) (Set []) = Set []
+  (<>) a (Set []) = a
+  (<>) a (Set (x:xs)) = (<>) (add x a) (Set xs)
 
--- instance Monoid (Set [a]) where
---   mempty = Set []
+instance Ord a => Monoid (Set a) where
+  mempty = Set []
 
 ------------------------------------------------------------------------------
 -- Ex 8: below you'll find two different ways of representing
@@ -293,19 +297,26 @@ passwordAllowed pass req = case req of
 data Operator = Plus | Multiplication
   deriving Show
 
-data Arithmetic = Literal Integer | Operation Operator Integer Integer 
+data Arithmetic = Literal Integer | Operation Operator Arithmetic Arithmetic
   deriving Show
 
 literal :: Integer -> Arithmetic
 literal i = Literal i
 
 operation :: String -> Arithmetic -> Arithmetic -> Arithmetic
-operation = todo
--- operation (Operation operator op1 op2) = case operator of 
---                                            Plus -> 
+-- operation = todo
+operation symbol op1 op2 = case symbol of 
+                             "+" -> Operation Plus op1 op2
+                             "*" -> Operation Multiplication op1 op2
 
 evaluate :: Arithmetic -> Integer
-evaluate = todo
+evaluate (Literal i) = i
+evaluate (Operation Plus op1 op2) = (+) (evaluate op1) (evaluate op2)
+evaluate (Operation Multiplication op1 op2) = (*) (evaluate op1) (evaluate op2)
 
 render :: Arithmetic -> String
-render = todo
+render (Literal i) = show i
+render (Operation operator op1 op2) = "(" ++ render op1 ++ op_string ++ render op2 ++ ")"
+  where op_string = case operator of 
+                     Plus -> "+"
+                     Multiplication -> "*"
