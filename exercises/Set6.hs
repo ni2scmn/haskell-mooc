@@ -196,14 +196,14 @@ simplify (RationalNumber a b) = (RationalNumber a_ b_) where
 
 instance Num RationalNumber where
   (RationalNumber a b) + (RationalNumber c d) = simplify $ (RationalNumber a_ b_) where
-    a_ = todo
-    b_ = todo
+    a_ = (a * d) + (c * b)
+    b_ = (b * d)
     lcm_ = lcm b d
-  p * q = todo
-  abs q = todo
-  signum q = todo
-  fromInteger x = todo
-  negate q = todo
+  (RationalNumber a b) * (RationalNumber c d) = simplify (RationalNumber (a*c) (b*d))
+  abs (RationalNumber a b) = RationalNumber (abs a) b
+  signum (RationalNumber a b) = RationalNumber (signum a) (signum b)
+  fromInteger x = RationalNumber x 1
+  negate (RationalNumber a b) = RationalNumber (-a) b
 
 ------------------------------------------------------------------------------
 -- Ex 11: a class for adding things. Define a class Addable with a
