@@ -1,7 +1,7 @@
 -- Exercise set 5a
 --
--- * defining algebraic datatypes
--- * recursive datatypes
+-- \* defining algebraic datatypes
+-- \* recursive datatypes
 
 module Set5a where
 
@@ -31,7 +31,7 @@ data BusTicket = SingleTicket | MonthlyTicket String
 -- Implement the functions totalPrice and buyOneMore below.
 
 data ShoppingEntry = MkShoppingEntry String Double Int
-  deriving Show
+  deriving (Show)
 
 threeApples :: ShoppingEntry
 threeApples = MkShoppingEntry "Apple" 0.5 3
@@ -67,7 +67,7 @@ buyOneMore (MkShoppingEntry item price count) = MkShoppingEntry item price (coun
 -- setAge and setName (see below).
 
 data Person = Person Int String
-  deriving Show
+  deriving (Show)
 
 -- fred is a person whose name is Fred and age is 90
 fred :: Person
@@ -124,7 +124,7 @@ right (Position x y) = Position (x + 1) y
 -- either be a freshman, a nth year student, or graduated.
 
 data Student = Freshman | NthYear Int | Graduated
-  deriving (Show,Eq)
+  deriving (Show, Eq)
 
 -- Implement the function study, which changes a Freshman into a 1st
 -- year student, a 1st year student into a 2nd year student, and so
@@ -134,7 +134,7 @@ data Student = Freshman | NthYear Int | Graduated
 study :: Student -> Student
 study Freshman = NthYear 1
 study (NthYear 7) = Graduated
-study (NthYear i) = NthYear (i+1)
+study (NthYear i) = NthYear (i + 1)
 study Graduated = Graduated
 
 ------------------------------------------------------------------------------
@@ -169,8 +169,8 @@ get (Down i) = i
 -- decreasing counter by one
 tick :: UpDown -> UpDown
 tick ud = case ud of
-  (Up i) -> Up (i+1)
-  (Down i) -> Down (i-1)
+  (Up i) -> Up (i + 1)
+  (Down i) -> Down (i - 1)
 
 -- toggle changes an increasing counter into a decreasing counter and
 -- vice versa
@@ -203,25 +203,26 @@ toggle (Down i) = Up i
 -- rgb (Mix (Invert Red) (Invert Green))  ==> [0.5,0.5,1]
 
 data Color = Red | Green | Blue | Mix Color Color | Invert Color
-  deriving Show
+  deriving (Show)
 
 rgb :: Color -> [Double]
-rgb Red = [1,0,0]
-rgb Green = [0,1,0]
-rgb Blue = [0,0,1]
+rgb Red = [1, 0, 0]
+rgb Green = [0, 1, 0]
+rgb Blue = [0, 0, 1]
 rgb (Mix a b) = rgbMean (rgb a) (rgb b)
 rgb (Invert i) = invertHelper (rgb i)
 
-
 invertHelper :: [Double] -> [Double]
-invertHelper i = ivH i where 
-   ivH [] = []
-   ivH (x:xs) = (1-x):(ivH xs) -- ivH xs ((1-x):c)
+invertHelper i = ivH i
+  where
+    ivH [] = []
+    ivH (x : xs) = (1 - x) : (ivH xs) -- ivH xs ((1-x):c)
 
-rgbMean :: [Double] -> [Double] -> [Double] 
-rgbMean a b = rgbMeanHelper a b [] where
-  rgbMeanHelper [] _ c = c
-  rgbMeanHelper (a:as) (b:bs) c = ((a+b)/2):c
+rgbMean :: [Double] -> [Double] -> [Double]
+rgbMean a b = rgbMeanHelper a b []
+  where
+    rgbMeanHelper [] _ c = c
+    rgbMeanHelper (a : as) (b : bs) c = ((a + b) / 2) : c
 
 ------------------------------------------------------------------------------
 -- Ex 9: define a parameterized datatype OneOrTwo that contains one or
@@ -232,7 +233,6 @@ rgbMean a b = rgbMeanHelper a b [] where
 --   Two "cat" "dog"  ::  OneOrTwo String
 
 data OneOrTwo a = One a | Two a a
-
 
 ------------------------------------------------------------------------------
 -- Ex 10: define a recursive datatype KeyVals for storing a set of
@@ -254,15 +254,15 @@ data OneOrTwo a = One a | Two a a
 -- KeyVals and lists of pairs.
 
 data KeyVals k v = Empty | Pair k v (KeyVals k v)
-  deriving Show
+  deriving (Show)
 
-toList :: KeyVals k v -> [(k,v)]
+toList :: KeyVals k v -> [(k, v)]
 toList Empty = []
-toList (Pair k v p) = (k,v):(toList p)
+toList (Pair k v p) = (k, v) : (toList p)
 
-fromList :: [(k,v)] -> KeyVals k v
+fromList :: [(k, v)] -> KeyVals k v
 fromList [] = Empty
-fromList ((k,v):xs) = Pair k v (fromList xs)  
+fromList ((k, v) : xs) = Pair k v (fromList xs)
 
 ------------------------------------------------------------------------------
 -- Ex 11: The data type Nat is the so called Peano
@@ -276,7 +276,7 @@ fromList ((k,v):xs) = Pair k v (fromList xs)
 --
 
 data Nat = Zero | PlusOne Nat
-  deriving (Show,Eq)
+  deriving (Show, Eq)
 
 fromNat :: Nat -> Int
 fromNat Zero = 0
@@ -286,8 +286,9 @@ toNat :: Int -> Maybe Nat
 toNat n
   | n < 0 = Nothing
   | n == 0 = Just Zero
-  | otherwise = Just $ tnH n where 
-    tnH n = if n==0 then Zero else PlusOne (tnH (n-1)) 
+  | otherwise = Just $ tnH n
+  where
+    tnH n = if n == 0 then Zero else PlusOne (tnH (n - 1))
 
 ------------------------------------------------------------------------------
 -- Ex 12: While pleasingly simple in its definition, the Nat datatype is not
@@ -342,7 +343,7 @@ data Bin = End | O Bin | I Bin
 
 -- This function increments a binary number by one.
 inc :: Bin -> Bin
-inc End   = I End
+inc End = I End
 inc (O b) = I b
 inc (I b) = O (inc b)
 
@@ -352,16 +353,17 @@ prettyPrint (O xs) = prettyPrint xs ++ "0"
 prettyPrint (I xs) = prettyPrint xs ++ "1"
 
 fromBin :: Bin -> Int
-fromBin x = fb' x 0 1 where
-  fb' End acc pos = acc
-  fb' (O b) acc pos = fb' b acc (pos*2)
-  fb' (I b) acc pos = fb' b (acc+pos) (pos*2)
+fromBin x = fb' x 0 1
+  where
+    fb' End acc pos = acc
+    fb' (O b) acc pos = fb' b acc (pos * 2)
+    fb' (I b) acc pos = fb' b (acc + pos) (pos * 2)
 
 toBin :: Int -> Bin
 toBin 0 = O End
 toBin x = tb' x
-  where 
+  where
     tb' 0 = End
-    tb' y 
+    tb' y
       | mod y 2 == 1 = I (tb' (div y 2))
       | otherwise = O (tb' (div y 2))
