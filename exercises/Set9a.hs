@@ -26,7 +26,11 @@ import Mooc.Todo
 -- Otherwise return "Ok."
 
 workload :: Int -> Int -> String
-workload nExercises hoursPerExercise = todo
+workload nExercises hoursPerExercise
+  | totalHours < 10 = "Piece of cake!"
+  | totalHours > 100 = "Holy moly!"
+  | otherwise = "Ok."
+  where totalHours =  nExercises * hoursPerExercise
 
 ------------------------------------------------------------------------------
 -- Ex 2: Implement the function echo that builds a string like this:
@@ -39,7 +43,9 @@ workload nExercises hoursPerExercise = todo
 -- Hint: use recursion
 
 echo :: String -> String
-echo = todo
+echo x = echoHelper x (x ++ ", ") where
+         echoHelper "" acc = acc
+         echoHelper (x:xs) acc = echoHelper xs (acc ++ xs ++ ", ") 
 
 ------------------------------------------------------------------------------
 -- Ex 3: A country issues some banknotes. The banknotes have a serial
@@ -52,7 +58,12 @@ echo = todo
 -- are valid.
 
 countValid :: [String] -> Int
-countValid = todo
+countValid x = countValidHelper x 0 where
+  countValidHelper [] n = n
+  countValidHelper (x:xs) n
+   | (x !! 2) == (x !! 4) = countValidHelper xs (n+1)
+   | (x !! 3) == (x !! 5) = countValidHelper xs (n+1)
+   | otherwise = countValidHelper xs n
 
 ------------------------------------------------------------------------------
 -- Ex 4: Find the first element that repeats two or more times _in a
@@ -64,7 +75,13 @@ countValid = todo
 --   repeated [1,2,1,2,3,3] ==> Just 3
 
 repeated :: Eq a => [a] -> Maybe a
-repeated = todo
+repeated x = repeatedHelper x [] where
+  repeatedHelper [] _ = Nothing
+  repeatedHelper (x:xs) occ = case alreadyOcc x occ of 
+                                True -> Just x
+                                False -> repeatedHelper xs (x:occ)
+   where alreadyOcc y [] = False
+         alreadyOcc y (x:xs) = x==y || alreadyOcc y xs
 
 ------------------------------------------------------------------------------
 -- Ex 5: A laboratory has been collecting measurements. Some of the
@@ -86,7 +103,12 @@ repeated = todo
 --     ==> Left "no data"
 
 sumSuccess :: [Either String Int] -> Either String Int
-sumSuccess = todo
+sumSuccess x = todo --foldr sumSuccessHelper 0 x -- where
+  -- sum' e acc = either(\_ -> acc) (\x -> acc + x) e
+
+-- sumSuccessHelper :: Either String Int -> Int -> Int
+-- sumSuccessHelper e acc = either(\_ -> acc) (\(Right x) -> acc + x) e
+
 
 ------------------------------------------------------------------------------
 -- Ex 6: A combination lock can either be open or closed. The lock
@@ -108,30 +130,34 @@ sumSuccess = todo
 --   isOpen (open "0000" (lock (changeCode "0000" (open "1234" aLock)))) ==> True
 --   isOpen (open "1234" (lock (changeCode "0000" (open "1234" aLock)))) ==> False
 
-data Lock = LockUndefined
+data Lock = Open String | Close String
   deriving Show
 
 -- aLock should be a locked lock with the code "1234"
 aLock :: Lock
-aLock = todo
+aLock = Close "1234"
 
 -- isOpen returns True if the lock is open
 isOpen :: Lock -> Bool
-isOpen = todo
+isOpen (Open _) = True
+isOpen (Close _) = False
 
 -- open tries to open the lock with the given code. If the code is
 -- wrong, nothing happens.
 open :: String -> Lock -> Lock
-open = todo
+open s o@(Open _) = o
+open s c@(Close code) = if s == code then Open code else c
 
 -- lock closes a lock. If the lock is already closed, nothing happens.
 lock :: Lock -> Lock
-lock = todo
+lock (Open code) = Close code
+lock c@(Close _) = c
 
 -- changeCode changes the code of an open lock. If the lock is closed,
 -- nothing happens.
 changeCode :: String -> Lock -> Lock
-changeCode = todo
+changeCode _ c@(Close _) = c
+changeCode s (Open _) = Open s
 
 ------------------------------------------------------------------------------
 -- Ex 7: Here's a type Text that just wraps a String. Implement an Eq
@@ -148,6 +174,13 @@ changeCode = todo
 
 data Text = Text String
   deriving Show
+
+
+instance Eq Text where
+  (==) (Text a) (Text b) = a_ == b_ where
+    a_ = filter not_space a
+    b_ = filter not_space b
+    not_space = not . Data.Char.isSpace
 
 
 ------------------------------------------------------------------------------
@@ -182,7 +215,11 @@ data Text = Text String
 --       ==> [("a",1),("b",2)]
 
 compose :: (Eq a, Eq b) => [(a,b)] -> [(b,c)] -> [(a,c)]
-compose = todo
+compose a_map b_map = composeHelper a_map b_map [] where
+  composeHelper [] _ comp = comp
+  composeHelper ((aa,ab):as) b_map comp = case lookup ab b_map of
+                                            (Just ba) -> composeHelper as b_map ((aa,ba):comp)
+                                            Nothing -> composeHelper as b_map comp
 
 ------------------------------------------------------------------------------
 -- Ex 9: Reorder a list using a list of indices.
@@ -226,4 +263,8 @@ multiply :: Permutation -> Permutation -> Permutation
 multiply p q = map (\i -> p !! (q !! i)) (identity (length p))
 
 permute :: Permutation -> [a] -> [a]
-permute = todo
+permute p list = reverse $ permuteHelper p list []
+
+permuteHelper :: Permutation -> [a] -> [a] -> [a]
+permuteHelper [] _ acc = acc
+permuteHelper (p:ps) list acc = permuteHelper ps list ([list !! p]++acc)
