@@ -352,7 +352,16 @@ prettyPrint (O xs) = prettyPrint xs ++ "0"
 prettyPrint (I xs) = prettyPrint xs ++ "1"
 
 fromBin :: Bin -> Int
-fromBin = todo
+fromBin x = fb' x 0 1 where
+  fb' End acc pos = acc
+  fb' (O b) acc pos = fb' b acc (pos*2)
+  fb' (I b) acc pos = fb' b (acc+pos) (pos*2)
 
 toBin :: Int -> Bin
-toBin = todo
+toBin 0 = O End
+toBin x = tb' x
+  where 
+    tb' 0 = End
+    tb' y 
+      | mod y 2 == 1 = I (tb' (div y 2))
+      | otherwise = O (tb' (div y 2))
