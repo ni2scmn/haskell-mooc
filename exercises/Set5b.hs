@@ -109,7 +109,7 @@ mapTree f (Node x l r) = Node (f x) (mapTree f l) (mapTree f r)
 --     ==> (Node 1 Empty
 --                 (Node 3 Empty Empty))
 
-cull :: Eq a => a -> Tree a -> Tree a
+cull :: (Eq a) => a -> Tree a -> Tree a
 cull val Empty = Empty
 cull val (Node x l r) = if x == val then Empty else Node x (cull val l) (cull val r)
 
@@ -152,9 +152,9 @@ cull val (Node x l r) = if x == val then Empty else Node x (cull val l) (cull va
 --                             (Node 1 Empty Empty))
 --                     (Node 3 Empty Empty))   ==>   True
 
-isOrdered :: Ord a => Tree a -> Bool
+isOrdered :: (Ord a) => Tree a -> Bool
 isOrdered Empty = True
-isOrdered (Node x l r) = allValues (<x) l && allValues (>x) r && isOrdered l && isOrdered r
+isOrdered (Node x l r) = allValues (< x) l && allValues (> x) r && isOrdered l && isOrdered r
 
 ------------------------------------------------------------------------------
 -- Ex 8: a path in a tree can be represented as a list of steps that
@@ -175,9 +175,9 @@ data Step = StepL | StepR
 walk :: [Step] -> Tree a -> Maybe a
 walk _ Empty = Nothing
 walk [] (Node x l r) = Just x
-walk (i:is) (Node x l r) = case i of
-                             StepL -> walk is l
-                             StepR -> walk is r
+walk (i : is) (Node x l r) = case i of
+  StepL -> walk is l
+  StepR -> walk is r
 
 ------------------------------------------------------------------------------
 -- Ex 9: given a tree, a path and a value, set the value at the end of
@@ -197,12 +197,12 @@ walk (i:is) (Node x l r) = case i of
 --
 --   set [StepL,StepR] 1 (Node 0 Empty Empty)  ==>  (Node 0 Empty Empty)
 set :: [Step] -> a -> Tree a -> Tree a
-set [] _   Empty = Empty
+set [] _ Empty = Empty
 set [] val (Node x l r) = Node val l r
-set (s:ss) value Empty = Empty
-set (s:ss) value (Node x l r) = case s of
-                                 StepL -> Node x (set ss value l) r
-                                 StepR -> Node x l (set ss value r)
+set (s : ss) value Empty = Empty
+set (s : ss) value (Node x l r) = case s of
+  StepL -> Node x (set ss value l) r
+  StepR -> Node x l (set ss value r)
 
 ------------------------------------------------------------------------------
 -- Ex 10: given a value and a tree, return a path that goes from the
@@ -217,16 +217,17 @@ set (s:ss) value (Node x l r) = case s of
 --                            (Node 1 Empty Empty))
 --                    (Node 5 Empty Empty))                     ==>  Just [StepL,StepR]
 
-search :: Eq a => a -> Tree a -> Maybe [Step]
+search :: (Eq a) => a -> Tree a -> Maybe [Step]
 search _ Empty = Nothing
 search value tree = searchHelper value tree []
 
-searchHelper :: Eq a => a -> Tree a -> [Step] -> Maybe [Step]
+searchHelper :: (Eq a) => a -> Tree a -> [Step] -> Maybe [Step]
 searchHelper _ Empty path = Nothing
 searchHelper value (Node x l r) path
   | value == x = Just path
-  | otherwise = case s_left of 
-                 (Just p) -> s_left
-                 Nothing -> s_right
-  where s_left = searchHelper value l (path ++ [StepL])
-        s_right = searchHelper value r (path ++ [StepR])
+  | otherwise = case s_left of
+      (Just p) -> s_left
+      Nothing -> s_right
+  where
+    s_left = searchHelper value l (path ++ [StepL])
+    s_right = searchHelper value r (path ++ [StepR])
