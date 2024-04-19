@@ -2,9 +2,8 @@ module Set11a where
 
 import Control.Monad
 import Data.List
-import System.IO
-
 import Mooc.Todo
+import System.IO
 
 -- Lecture 11:
 --   * The IO type
@@ -79,19 +78,20 @@ readWords n = do
 --   ["bananas","garlic","pakchoi"]
 
 readUntil :: (String -> Bool) -> IO [String]
-readUntil f = rU' f [] where 
-  rU' f acc = do
-     l <- getLine
-     if f l then return (reverse acc) else rU' f (l:acc)
+readUntil f = rU' f []
+  where
+    rU' f acc = do
+      l <- getLine
+      if f l then return (reverse acc) else rU' f (l : acc)
 
 ------------------------------------------------------------------------------
 -- Ex 6: given n, print the numbers from n to 0, one per line
 
 countdownPrint :: Int -> IO ()
 countdownPrint 0 = putStrLn "0"
-countdownPrint n = do 
+countdownPrint n = do
   putStrLn $ show n
-  countdownPrint (n-1)
+  countdownPrint (n - 1)
 
 ------------------------------------------------------------------------------
 -- Ex 7: isums n should read n numbers from the user (one per line) and
@@ -106,14 +106,16 @@ countdownPrint n = do
 --   5. produces 9
 
 isums :: Int -> IO Int
-isums n = i' n 0 where
-  i' 0 sum = return sum
-  i' n sum = do
-    x <- getLine
-    let xr = read x
-    let sum_up = sum + xr
-    putStrLn (show sum_up)
-    i' (n-1) sum_up
+isums n = i' n 0
+  where
+    i' 0 sum = return sum
+    i' n sum = do
+      x <- getLine
+      let xr = read x
+      let sum_up = sum + xr
+      putStrLn (show sum_up)
+      i' (n - 1) sum_up
+
 ------------------------------------------------------------------------------
 -- Ex 8: when is a useful function, but its first argument has type
 -- Bool. Write a function that behaves similarly but the first
@@ -123,6 +125,7 @@ whenM :: IO Bool -> IO () -> IO ()
 whenM cond op = do
   cond_eval <- cond
   if cond_eval then op else return ()
+
 ------------------------------------------------------------------------------
 -- Ex 9: implement the while loop. while condition operation should
 -- run operation as long as condition returns True.
@@ -136,17 +139,19 @@ whenM cond op = do
 
 -- used in an example
 ask :: IO Bool
-ask = do putStrLn "Y/N?"
-         line <- getLine
-         return $ line == "Y"
+ask = do
+  putStrLn "Y/N?"
+  line <- getLine
+  return $ line == "Y"
 
 while :: IO Bool -> IO () -> IO ()
 while cond op = do
   cond_eval <- cond
-  if cond_eval then do
-                      op
-                      while cond op
-               else return ()
+  if cond_eval
+    then do
+      op
+      while cond op
+    else return ()
 
 ------------------------------------------------------------------------------
 -- Ex 10: given a string and an IO operation, print the string, run

@@ -1,12 +1,10 @@
 module Set11b where
 
 import Control.Monad
-import Data.List
 import Data.IORef
-import System.IO
-
+import Data.List
 import Mooc.Todo
-
+import System.IO
 
 ------------------------------------------------------------------------------
 -- Ex 1: Given an IORef String and a list of Strings, update the value
@@ -21,9 +19,9 @@ import Mooc.Todo
 
 appendAll :: IORef String -> [String] -> IO ()
 appendAll s [] = return ()
-appendAll s (l:ls)  = do
+appendAll s (l : ls) = do
   x <- readIORef s
-  writeIORef s (x++l)
+  writeIORef s (x ++ l)
   appendAll s ls
 
 ------------------------------------------------------------------------------
@@ -102,12 +100,18 @@ compose op1 op2 c = do
 -- operations for Handles, which represent open files that can be read
 -- from or written to. Here are some functions that might be useful:
 --
+
 -- * hGetLine :: Handle -> IO String
+
 --   Reads one line from the Handle. Will fail if the Handle is at the
 --   end of the file
+
 -- * hIsEOF :: Handle -> IO Bool
+
 --   Produces True if the Handle is at the end of the file.
+
 -- * hGetContents :: Handle -> IO String
+
 --   Reads content from Handle until the end of the file.
 --
 -- Implement the function hFetchLines which returns the contents of
@@ -128,6 +132,7 @@ hFetchLines :: Handle -> IO [String]
 hFetchLines h = do
   ll <- hGetContents h
   return $ lines ll
+
 ------------------------------------------------------------------------------
 -- Ex 6: Given a Handle and a list of line indexes, produce the lines
 -- at those indexes from the file.
@@ -141,7 +146,7 @@ hFetchLines h = do
 hSelectLines :: Handle -> [Int] -> IO [String]
 hSelectLines h nums = do
   lls <- hFetchLines h
-  let getlls x = lls !! (x-1)
+  let getlls x = lls !! (x - 1)
   return (map getlls nums)
 
 ------------------------------------------------------------------------------
@@ -177,17 +182,16 @@ hSelectLines h nums = do
 --   *Set11b>
 
 -- This is used in the example above. Don't change it!
-counter :: (String,Integer) -> (Bool,String,Integer)
-counter ("inc",n)   = (True,"done",n+1)
-counter ("print",n) = (True,show n,n)
-counter ("quit",n)  = (False,"bye bye",n)
+counter :: (String, Integer) -> (Bool, String, Integer)
+counter ("inc", n) = (True, "done", n + 1)
+counter ("print", n) = (True, show n, n)
+counter ("quit", n) = (False, "bye bye", n)
 
-interact' :: ((String,st) -> (Bool,String,st)) -> st -> IO st
+interact' :: ((String, st) -> (Bool, String, st)) -> st -> IO st
 interact' f state = do
   l <- getLine
-  let (b1, s1, st1) = f (l,state)
+  let (b1, s1, st1) = f (l, state)
 
   putStrLn s1
 
   if b1 then interact' f st1 else return st1
-  
